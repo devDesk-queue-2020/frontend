@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.nav-links {
+width: 10rem;
+font-size: 1rem;
+color: white;
+text-decoration: none;
+font-weight: bolder;
+text-decoration: none;
+}

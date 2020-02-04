@@ -1,8 +1,7 @@
 import React, {useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
-import TicketCard from "./TicketCard";
-import SearchForm from "./SearchForm";
+import TicketCard from "../TicketCard";
 
 export default function StudentDashboard() {
     // Adding useState to track data from useEffect
@@ -10,7 +9,7 @@ export default function StudentDashboard() {
     
     useEffect(() => {
 // Adding API Request here
-Axios.get("localhost:5000/api/tickets")
+Axios.get("http://localhost:5000/api/tickets")
       .then(response => {
         console.log(response.data.results);
         setTickets(response.data.results);
@@ -25,7 +24,6 @@ Axios.get("localhost:5000/api/tickets")
     <section className="student-dashboard">
     <div>
       <h2>Student Dashboard</h2>
-      <SearchForm search={search} tickets={tickets} />
       <Link className="nav-links" to={"/"}>
         Home
       </Link>
