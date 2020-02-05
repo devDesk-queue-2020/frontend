@@ -4,6 +4,8 @@ import Header from "./components/Header";
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
 import StudentDashboard from "./components/Student/StudentDashboard";
+import HelperDashboard from "./components/Helper/HelperDashboard";
+import CreateTicket from "./components/Student/CreateTicket";
 
 import "./App.css";
 
@@ -22,7 +24,9 @@ function App() {
       />
       <Route path="/signup" component={SignUp} />
       <Route path="/login" component={Login} />
-      <Route path="/Student/studentdashboard" component={StudentDashboard} />
+      <Route path="/student/dashboard" component={StudentDashboard} />
+      <Route path="/helper/dashboard" component={HelperDashboard} />
+      <Route path="/student/createticket" component={CreateTicket} />
     </main>
   );
 }

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-
 const MainHeader = styled.header`
 display: flex;
 align-items: center;

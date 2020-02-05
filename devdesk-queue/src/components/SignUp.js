@@ -3,12 +3,14 @@ import axios from "axios";
 import * as Yup from "yup";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+
 
 const FormDiv = styled.div`
   margin-top: 10%;
 `;
 
-const StyledForm = styled.form`
+const StyledForm = styled.div`
   display: flex;
   flex-direction: column;
   width: 15rem;
@@ -58,14 +60,20 @@ const StyledForm = styled.form`
   }
 `;
 
-export default function regForm() {
+export default function SignUp() {
+  const history = useHistory()
   function submitHandler(values, actions) {
     console.log(values, actions);
     // Sending form data to server
     axios
-      .post("http://localhost:5000/api/users", values)
+      .post("http://localhost:5001/api/users/register", values)
       .then(res => {
-        console.log(res);
+        if (res.role === "student") {
+          history.push("/student/dashboard");
+        } else {
+          history.push("/helper/dashboard");
+        }
+        console.log("response", res);
         actions.resetForm();
       })
       .catch(e => console.log(e))
@@ -84,39 +92,19 @@ export default function regForm() {
         <StyledForm>
           <Form>
             <label htmlFor="firstname">First Name</label>
-            <Field
-              type="text"
-              id="loginform_firstname"
-              name="firstname"
-            />
+            <Field type="text" id="loginform_firstname" name="firstname" />
             <ErrorMessage name="firstname" component="div" className="error" />
             <label htmlFor="loginform_lastname">Last Name</label>
-            <Field
-              type="text"
-              id="loginform_lastname"
-              name="lastname"
-            />
+            <Field type="text" id="loginform_lastname" name="lastname" />
             <ErrorMessage name="lastname" component="div" className="error" />
             <label htmlFor="loginform_username">Username</label>
-            <Field
-              type="text"
-              id="loginform_username"
-              name="username"
-            />
+            <Field type="text" id="loginform_username" name="username" />
             <ErrorMessage name="username" component="div" className="error" />
             <label htmlFor="loginform_email">Email</label>
-            <Field
-              type="text"
-              id="loginform_email"
-              name="email"
-            />
+            <Field type="text" id="loginform_email" name="email" />
             <ErrorMessage name="email" component="div" className="error" />
             <label htmlFor="loginform_password">Password</label>
-            <Field
-              type="password"
-              id="loginform_password"
-              name="password"
-            />
+            <Field type="password" id="loginform_password" name="password" />
             <ErrorMessage name="password" component="div" className="error" />
             <label htmlFor="loginform_role">Select Role: </label>
             <Field as="select" name="role_type" id="loginform_role_type">
@@ -125,7 +113,7 @@ export default function regForm() {
               <option value="student">Student</option>
             </Field>
             <ErrorMessage name="role_type" component="div" className="error" />
-              <button type="submit">Sign Up</button>
+            <button type="submit">Sign Up</button>
           </Form>
         </StyledForm>
       </Formik>

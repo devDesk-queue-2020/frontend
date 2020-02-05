@@ -3,13 +3,16 @@ import axios from "axios";
 import * as Yup from "yup";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import jwt from "jsonwebtoken";
+
 
 const FormDiv = styled.div`
-margin-top: 10%;
+  margin-top: 10%;
 `;
 
-const StyledForm = styled.form`
- display: flex;
+const StyledForm = styled.div`
+  display: flex;
   flex-direction: column;
   height: 100%;
   width: 15rem;
@@ -59,14 +62,25 @@ const StyledForm = styled.form`
   }
 `;
 
-export default function loginForm() {
+export default function Login() {
+  const history = useHistory()
   function submitHandler(values, actions) {
     console.log(values, actions);
     // Sending form data to server
+    
     axios
-      .post("http://localhost:5000/api/users", values)
+      .post("http://localhost:5001/api/users/login", values)
       .then(res => {
-        console.log(res);
+        console.log(res)
+        if (res.status === 200) {
+          const decoded = jwt.decode(res.data.token)
+          localStorage.setItem("userId", decoded.user_id)
+          console.log(decoded)
+          history.push("/student/dashboard");
+        } else {
+          history.push("/helper/dashboard");
+        }
+        console.log("response", res);
         actions.resetForm();
       })
       .catch(e => console.log(e))
@@ -84,42 +98,26 @@ export default function loginForm() {
       >
         <StyledForm>
           <Form>
-          <label htmlFor="loginform_username">Username</label>
-          <Field
-            type="text"
-            id="loginform_username"
-            name="username"
-          />
-          <ErrorMessage name="username" component="div" className="error" />
-          <label htmlFor="loginform_password">Password</label>
-          <Field
-            type="password"
-            id="loginform_password"
-            name="password"
-          />
-          <ErrorMessage name="password" component="div" className="error" />
-          <label htmlFor="loginform_remember_pass">Remember password?</label>
-          <Field
-            type="checkbox"
-            id="loginform_remember_pass"
-            name="remember_pass"
-          />
-          <ErrorMessage
-            name="remember_pass"
-            component="div"
-            className="error"
-          />
-
-          <label htmlFor="loginform_role">Select Role: </label>
-          <Field as="select" name="role_type" id="loginform_role_type">
-            <option value="">Select an option</option>
-            <option value="helper">Helper</option>
-            <option value="student">Student</option>
-          </Field>
-          <ErrorMessage name="role_type" component="div" className="error" />
-          <button type="submit">Login</button>
+            <label htmlFor="loginform_username">Username</label>
+            <Field type="text" id="loginform_username" name="username" />
+            <ErrorMessage name="username" component="div" className="error" />
+            <label htmlFor="loginform_password">Password</label>
+            <Field type="password" id="loginform_password" name="password" />
+            <ErrorMessage name="password" component="div" className="error" />
+            <label htmlFor="loginform_remember_pass">Remember password?</label>
+            <Field
+              type="checkbox"
+              id="loginform_remember_pass"
+              name="remember_pass"
+            />
+            <ErrorMessage
+              name="remember_pass"
+              component="div"
+              className="error"
+            />
+            <button type="submit">Login</button>
           </Form>
-          </StyledForm>
+        </StyledForm>
       </Formik>
     </FormDiv>
   );
@@ -128,14 +126,11 @@ export default function loginForm() {
 const validationSchema = Yup.object().shape({
   username: Yup.string().required("Username is a required field"),
   password: Yup.string().required("Password is a required field"),
-  remember_pass: Yup.boolean(),
-  role_type: Yup.string().required("Must select role")
-});
+  remember_pass: Yup.boolean(),});
 
 // Clearing the values in our form inputs
 const initialTestingFormValues = {
   username: "",
   password: "",
   remember_pass: false,
-  role_type: ""
 };
