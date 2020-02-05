@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Axios from "axios";
+import axios from "axios";
 import TicketCard from "../TicketCard";
 
-export default function StudentDashboard() {
+export default function StudentDashboard(props) {
   // Adding useState to track data from useEffect
   const [tickets, setTickets] = useState([]);
   console.log(tickets);
 
   useEffect(() => {
     // Adding API Request here
-    Axios.get("http://localhost:5001/api/tickets")
+    axios.get("http://devdesk-2020.heroku.app.com/api/tickets", { headers: { Authorization: props.token,  }})
       .then(response => {
         console.log(response.data);
         setTickets(response.data);
       })
-      .catch(e => console.log(e))
+      .catch(e => console.log(e.message))
       .finally(() => {
         console.log("Axios request finished.");
       });

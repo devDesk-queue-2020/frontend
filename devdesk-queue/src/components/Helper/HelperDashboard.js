@@ -9,7 +9,7 @@ export default function HelperDashboard() {
     
     useEffect(() => {
 // Adding API Request here
-Axios.get("http://localhost:5001/api/tickets")
+Axios.get("http://devdesk-2020.heroku.app.com/api/tickets")
       .then(response => {
         console.log(response.data);
         setTickets(response.data);

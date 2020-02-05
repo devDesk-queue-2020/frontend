@@ -66,7 +66,7 @@ export default function SignUp() {
     console.log(values, actions);
     // Sending form data to server
     axios
-      .post("http://localhost:5001/api/users/register", values)
+      .post("http://devdesk-2020.heroku.app.com/api/users/register", values)
       .then(res => {
         if (res.role === "student") {
           history.push("/student/dashboard");
@@ -91,12 +91,12 @@ export default function SignUp() {
       >
         <StyledForm>
           <Form>
-            <label htmlFor="firstname">First Name</label>
-            <Field type="text" id="loginform_firstname" name="firstname" />
-            <ErrorMessage name="firstname" component="div" className="error" />
-            <label htmlFor="loginform_lastname">Last Name</label>
-            <Field type="text" id="loginform_lastname" name="lastname" />
-            <ErrorMessage name="lastname" component="div" className="error" />
+            <label htmlFor="first_name">First Name</label>
+            <Field type="text" id="loginform_first_name" name="first_name" />
+            <ErrorMessage name="first_name" component="div" className="error" />
+            <label htmlFor="loginform_last_name">Last Name</label>
+            <Field type="text" id="loginform_last_name" name="last_name" />
+            <ErrorMessage name="last_name" component="div" className="error" />
             <label htmlFor="loginform_username">Username</label>
             <Field type="text" id="loginform_username" name="username" />
             <ErrorMessage name="username" component="div" className="error" />
@@ -107,12 +107,12 @@ export default function SignUp() {
             <Field type="password" id="loginform_password" name="password" />
             <ErrorMessage name="password" component="div" className="error" />
             <label htmlFor="loginform_role">Select Role: </label>
-            <Field as="select" name="role_type" id="loginform_role_type">
+            <Field as="select" name="role" id="loginform_role">
               <option value="">Select an option</option>
               <option value="helper">Helper</option>
               <option value="student">Student</option>
             </Field>
-            <ErrorMessage name="role_type" component="div" className="error" />
+            <ErrorMessage name="role" component="div" className="error" />
             <button type="submit">Sign Up</button>
           </Form>
         </StyledForm>
@@ -122,18 +122,18 @@ export default function SignUp() {
 }
 
 const validationSchema = Yup.object().shape({
-  firstname: Yup.string().required("First Name is a required field"),
-  lastname: Yup.string().required("Last Name is a required field"),
+  first_name: Yup.string().required("First Name is a required field"),
+  last_name: Yup.string().required("Last Name is a required field"),
   username: Yup.string().required("Username is a required field"),
   password: Yup.string().required("Password is a required field"),
-  role_type: Yup.string().required("Must select role")
+  role: Yup.string().required("Must select role")
 });
 
 // Clearing the values in our form inputs
 const initialTestingFormValues = {
-  firstname: ``,
-  lastname: ``,
+  first_name: ``,
+  last_name: ``,
   username: "",
   password: "",
-  role_type: ""
+  role: ""
 };

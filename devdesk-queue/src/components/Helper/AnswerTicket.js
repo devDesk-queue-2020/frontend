@@ -67,7 +67,7 @@ export default function CreateTicket() {
         console.log(values, actions);
         // Sending form data to server
         axios
-            .post("http://localhost:5001/api/tickets", values)
+            .post("http://devdesk-2020.heroku.app.com/api/tickets", values)
             .then(res => {
             console.log(res);
             if (res.status === 201) {

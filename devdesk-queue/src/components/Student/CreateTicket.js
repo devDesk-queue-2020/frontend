@@ -63,14 +63,14 @@ const StyledForm = styled.div`
     }
   }
 `;
-export default function CreateTicket() {
+export default function CreateTicket(props) {
 
 const [category, setCategory] = useState([]);
 
 
     const history = useHistory()
     useEffect(() => {
-    Axios.get("http://localhost:5001/api/category")
+    Axios.get("http://devdesk-2020.heroku.app.com/api/category")
     .then(response => {
         console.log(response.data)
         setCategory(response.data);

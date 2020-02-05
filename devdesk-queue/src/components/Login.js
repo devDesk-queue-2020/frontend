@@ -3,7 +3,6 @@ import axios from "axios";
 import * as Yup from "yup";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
 import jwt from "jsonwebtoken";
 
 
@@ -62,31 +61,31 @@ const StyledForm = styled.div`
   }
 `;
 
-export default function Login() {
-  const history = useHistory()
+export default function Login(props) {
   function submitHandler(values, actions) {
     console.log(values, actions);
     // Sending form data to server
     
     axios
-      .post("http://localhost:5001/api/users/login", values)
-      .then(res => {
-        console.log(res)
-        if (res.status === 200) {
-          const decoded = jwt.decode(res.data.token)
+    .post("https://devdesk-2020.herokuapp.com/api/users/login", values)
+    .then(res => {
+      actions.resetForm();
+      props.setToken(res.data.token);
+      const decoded = jwt.decode(res.data.token);
           localStorage.setItem("userId", decoded.user_id)
           console.log(decoded)
-          history.push("/student/dashboard");
-        } else {
-          history.push("/helper/dashboard");
-        }
-        console.log("response", res);
-        actions.resetForm();
-      })
-      .catch(e => console.log(e))
-      .finally(() => {
-        console.log("Axios request finished.");
-      });
+          if (decoded.role === "Helper") {
+            console.log("helper")
+            props.history.push("/helper/dashboard");
+          } else {
+            console.log("student")
+            props.history.push("/student/dashboard");
+          }
+        })
+        .catch(e => console.log(e.message))
+        .finally(() => {
+          console.log("Axios request finished.");
+        });
   }
 
   return (
