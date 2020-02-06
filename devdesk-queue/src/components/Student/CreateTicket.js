@@ -106,7 +106,7 @@ export default function CreateTicket() {
       .post("https://devdesk-2020.herokuapp.com/api/tickets", values)
       .then(res => {
         console.log(res);
-        if (res.status === 201) {
+        if (res.status === 200) {
           history.push("/student/dashboard");
         }
         console.log("response", res);

@@ -30,7 +30,7 @@ justify-content: space-around;
 width: 5rem;
 `;
 
-export default function StudentDashboard(props) {
+export default function HelperDashboard(props) {
   // Adding useState to track data from useEffect
   const [tickets, setTickets] = useState([]);
   console.log(tickets);
@@ -84,7 +84,7 @@ export default function StudentDashboard(props) {
           tickets.map(tick => {
             return ( 
             <div className="ticket">
-            <TicketCard key={tick.id} ticket={tick} />
+            <TicketCard key={tick.id} ticket={tick} token={props.token} {...props}/>
             </div>)
           })
         )}

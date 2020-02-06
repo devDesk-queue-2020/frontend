@@ -79,7 +79,7 @@ export default function StudentDashboard(props) {
           <p>no tickets</p>
         ) : (
           tickets.map(tick => {
-            return <TicketCard key={tick.id} ticket={tick} />;
+            return <TicketCard key={tick.id} ticket={tick} token={props.token} {...props} />;
           })
         )}
       </div>
