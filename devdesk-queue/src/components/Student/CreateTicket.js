@@ -86,9 +86,13 @@ export default function CreateTicket() {
 
   const history = useHistory();
   useEffect(() => {
-    Axios.get("https://devdesk-2020.herokuapp.com/api/category")
+    Axios.get("https://devdesk-2020.herokuapp.com/api/category", {
+      headers: {
+        Authorization: localStorage.getItem("token")
+      }
+    })
     .then(res => {
-        console.log(res.data);
+        console.log(res.data, "something else");
         setCategory(res.data);
       })
       .catch(e => console.log(e.message))
@@ -103,7 +107,8 @@ export default function CreateTicket() {
     values["student_id"] = localStorage.getItem("userId");
     // Sending form data to server
     axios
-      .post("https://devdesk-2020.herokuapp.com/api/tickets", values)
+      .post("https://devdesk-2020.herokuapp.com/api/tickets")
+    
       .then(res => {
         console.log(res);
         if (res.status === 200) {
@@ -151,7 +156,7 @@ export default function CreateTicket() {
               <Field as="select" name="category_id" id="createticket_category">
                 <option value="">Select an option</option>
                 {category.map(cat => {
-                  return <option value={cat.id}>{cat.category_name}</option>;
+                  return <option key={cat.id} value={cat.id}>{cat.category_name}</option>;
                 })}
               </Field>
               <ErrorMessage

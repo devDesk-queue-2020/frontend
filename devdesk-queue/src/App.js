@@ -5,7 +5,6 @@ import Login from "./components/Login";
 import StudentDashboard from "./components/Student/StudentDashboard";
 import HelperDashboard from "./components/Helper/HelperDashboard";
 import CreateTicket from "./components/Student/CreateTicket";
-import AnswerTicket from "./components/Helper/AnswerTicket";
 
 import "./App.css";
 
@@ -42,10 +41,6 @@ function App() {
       <Route
         path="/student/createticket"
         render={props => <CreateTicket token={token} />}
-      />
-      <Route
-        path="/helper/answerticket"
-        render={props => <AnswerTicket token={token} />}
       />
     </main>
   );

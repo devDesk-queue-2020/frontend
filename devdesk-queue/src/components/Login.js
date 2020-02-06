@@ -99,6 +99,8 @@ export default function Login(props) {
         props.setToken(res.data.token);
         const decoded = jwt.decode(res.data.token);
         localStorage.setItem("userId", decoded.user_id);
+
+        localStorage.setItem("token", res.data.token);
         console.log(decoded);
         if (decoded.role === "Helper") {
           console.log("helper");
