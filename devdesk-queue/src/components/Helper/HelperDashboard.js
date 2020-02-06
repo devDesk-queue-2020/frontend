@@ -72,23 +72,18 @@ export default function HelperDashboard(props) {
     </MainHeader>
       <h2>Helper Dashboard</h2>
       <div className="dashboard">
-        <div>
-          <Link className="nav-links" to={"/"}>
-            Home
-          </Link>
-        </div>
-        <div classname="mapContainer">
+        
+        
         {!tickets ? (
           <p>no tickets</p>
         ) : (
           tickets.map(tick => {
             return ( 
-            <div className="ticket">
             <TicketCard key={tick.id} ticket={tick} token={props.token} {...props}/>
-            </div>)
+            )
           })
         )}
-        </div>
+        
       </div>
     </section>
   );
