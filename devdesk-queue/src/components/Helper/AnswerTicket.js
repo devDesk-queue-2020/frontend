@@ -1,10 +1,36 @@
-import React from "react";
-import axios from 'axios';
-import * as Yup from 'yup';
-import { Form, Formik, Field, ErrorMessage } from 'formik';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import * as Yup from "yup";
+import { Form, Formik, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import Axios from "axios";
+import { Link } from "react-router-dom";
 
+const MainHeader = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: RGB(188, 19, 50);
+`;
 
+const Img = styled.img`
+  width: 5rem;
+  height: 5rem;
+`;
+
+const Title = styled.header`
+  display: flex;
+  flex-wrap: wrap;
+
+  color: white;
+`;
+
+const Nav = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 15rem;
+`;
 
 const FormDiv = styled.div`
   margin-top: 10%;
@@ -20,12 +46,10 @@ const StyledForm = styled.div`
   padding: 2rem 2rem;
   border-radius: 5px;
   box-shadow: #999 1px 2px 5px;
-
   a {
     color: #08addd;
     text-decoration: none;
   }
-
   input {
     display: flex;
     flex-direction: column;
@@ -36,12 +60,10 @@ const StyledForm = styled.div`
     height: 30px;
     padding-left: 12px;
     outline: none;
-
     &::placeholder {
       color: gray;
     }
   }
-
   button {
     display: flex;
     margin-top: 1rem;
@@ -53,37 +75,57 @@ const StyledForm = styled.div`
     outline: none;
     border: none;
     border-radius: 3px;
-
     &:hover {
       color: #bb1333;
       background: #fff;
     }
   }
 `;
+export default function AnswerTicket(props) {
+  const [category, setCategory] = useState([]);
+  function submitHandler(values, actions) {
+    console.log(values, actions);
 
-export default function CreateTicket() {
-    const history = useHistory()
-    function submitHandler (values, actions) {
-        console.log(values, actions);
-        // Sending form data to server
-        axios
-            .post("http://devdesk-2020.heroku.app.com/api/tickets", values)
-            .then(res => {
-            console.log(res);
-            if (res.status === 201) {
-                history.push("/student/dashboard");
-            }
-            console.log("response", res);
-            actions.resetForm();
-            })
-            .catch(e => console.log(e))
-            .finally(() => {
-                console.log('Axios request finished.');
-            });
-    }
+    // Sending form data to server
+    axios
+      .post("https://devdesk-2020.herokuapp.com/api/comments/:id", values)
+      .then(res => {
+        actions.resetForm();
+        console.log(res);
+        if (res.status === 200) {
+          props.history.push("/student/dashboard");
+        }
+        console.log("response", res);
+        actions.resetForm();
+      })
+      .catch(e => console.log(e.message))
+      .finally(() => {
+        console.log("Axios request finished.");
+      });
+  }
 
-    return (
-        <FormDiv>
+  return (
+    <>
+      <MainHeader>
+        <Title>
+          <Img
+            className="main-img"
+            src={require(`./Lambda_Logo.jpg`)}
+            alt="logo"
+          />
+          <h1>Lambda DevDesk</h1>
+        </Title>
+        <Nav>
+          <Link className="nav-links" to={"/helper/dashboard"}>
+            Dashboard
+          </Link>
+          <Link className="nav-links" to={"/login"}>
+            Sign Out
+          </Link>
+        </Nav>
+      </MainHeader>
+
+      <FormDiv>
         <Formik
           onSubmit={submitHandler}
           initialValues={initialTestingFormValues}
@@ -91,24 +133,20 @@ export default function CreateTicket() {
         >
           <StyledForm>
             <Form>
-            <label htmlFor="createticket_category">Category: </label>
-            <Field as="select" name="category" id="createticket_category">
-                <option value="">Select an option</option>
-                <option value="html">HTML</option>
-                <option value="css">CSS</option>
-                <option value="js">JS</option>
-                <option value="react">React.js</option>
-                <option value="redux">Redux</option>
-                <option value="node">Node.js</option>
-                <option value="python">Python</option>
-                <ErrorMessage name="category" component="div" className="error" />
-              </Field>
-              <label htmlFor="username">Username</label>
-              <Field type="text" id="createticket_username" name="username" />
-              <ErrorMessage name="username" component="div" className="error" />
-              <label htmlFor="createticket_title">Title</label>
-              <Field type="text" id="createticket_title" name="title" />
-              <ErrorMessage name="title" component="div" className="error" />
+              <label htmlFor="answerticket_comment_id">Comment ID: </label>
+              <Field
+                as="text"
+                name="comment_id"
+                id="answerticket_comment_id"
+              ></Field>
+              <ErrorMessage
+                name="comment_id"
+                component="div"
+                className="error"
+              />
+              <label htmlFor="answerticket_author_id">Title</label>
+              <Field type="text" id="answerticker_author_id" name="author_id" />
+              <ErrorMessage name="author_id" component="div" className="error" />
               <label htmlFor="createticket_content">Content</label>
               <Field type="text" id="createticket_content" name="content" />
               <ErrorMessage name="content" component="div" className="error" />
@@ -117,18 +155,17 @@ export default function CreateTicket() {
           </StyledForm>
         </Formik>
       </FormDiv>
-    );
-    }
-    const validationSchema = Yup.object().shape({
-        category: Yup.string().required("Please select a category"),
-        username: Yup.string(),
-        title: Yup.string().required("Please give a title"),
-        content: Yup.string().required("Please describe your problem"),
-      });
+    </>
+  );
+}
+const validationSchema = Yup.object().shape({
+  category_id: Yup.number().required("Please select a category"),
+  title: Yup.string().required("Please give a title"),
+  content: Yup.string().required("Please describe your problem")
+});
 
-      const initialTestingFormValues = {
-        category: "",
-        title: "",
-        content: "",
-      };
-      
+const initialTestingFormValues = {
+  category_id: "",
+  title: "",
+  content: ""
+};

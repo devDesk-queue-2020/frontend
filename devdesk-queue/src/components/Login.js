@@ -4,10 +4,11 @@ import * as Yup from "yup";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
 import jwt from "jsonwebtoken";
+import { Link } from "react-router-dom";
 
 
 const FormDiv = styled.div`
-  margin-top: 10%;
+  margin-top: 5%;
 `;
 
 const StyledForm = styled.div`
@@ -44,7 +45,6 @@ const StyledForm = styled.div`
 
   button {
     display: flex;
-    margin-top: 1rem;
     padding: 0.5rem 0.5rem;
     background: #bb1333;
     color: #fff;
@@ -61,34 +61,80 @@ const StyledForm = styled.div`
   }
 `;
 
+const MainHeader = styled.header`
+display: flex;
+align-items: center;
+justify-content: space-between;
+background-color: RGB(188,19,50);
+`;
+
+const Img = styled.img`
+width: 5rem;
+height: 5rem;
+`;
+
+const Title = styled.header`
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+color: white;
+`;
+
+const Nav = styled.div`
+display: flex;
+justify-content: space-around;
+width: 10rem;
+`;
+
+
 export default function Login(props) {
   function submitHandler(values, actions) {
     console.log(values, actions);
     // Sending form data to server
-    
+
     axios
-    .post("https://devdesk-2020.herokuapp.com/api/users/login", values)
-    .then(res => {
-      actions.resetForm();
-      props.setToken(res.data.token);
-      const decoded = jwt.decode(res.data.token);
-          localStorage.setItem("userId", decoded.user_id)
-          console.log(decoded)
-          if (decoded.role === "Helper") {
-            console.log("helper")
-            props.history.push("/helper/dashboard");
-          } else {
-            console.log("student")
-            props.history.push("/student/dashboard");
-          }
-        })
-        .catch(e => console.log(e.message))
-        .finally(() => {
-          console.log("Axios request finished.");
-        });
+      .post("https://devdesk-2020.herokuapp.com/api/users/login", values)
+      .then(res => {
+        actions.resetForm();
+        props.setToken(res.data.token);
+        const decoded = jwt.decode(res.data.token);
+        localStorage.setItem("userId", decoded.user_id);
+        console.log(decoded);
+        if (decoded.role === "Helper") {
+          console.log("helper");
+          props.history.push("/helper/dashboard");
+        } else {
+          console.log("student");
+          props.history.push("/student/dashboard");
+        }
+      })
+      .catch(e => console.log(e.message))
+      .finally(() => {
+        console.log("Axios request finished.");
+      });
   }
 
   return (
+<>
+            <MainHeader>
+      <Title>
+      <Img
+            className="main-img"
+            src={require(`./Lambda_Logo.jpg`)}
+            alt="logo"
+          />
+      <h1>Lambda DevDesk</h1>
+      </Title>
+      <Nav>
+      <Link className="nav-links" to={"/signup"}>
+            Sign Up
+          </Link>
+          <Link className="nav-links" to={"/login"}>
+          Login
+          </Link>
+          </Nav>
+    </MainHeader>
+
     <FormDiv>
       <Formik
         onSubmit={submitHandler}
@@ -116,20 +162,25 @@ export default function Login(props) {
             />
             <button type="submit">Login</button>
           </Form>
+          <p>Don't have an account? <Link className="nav-links" to={"/signup"}>
+          Sign up!
+          </Link></p>
         </StyledForm>
       </Formik>
     </FormDiv>
+    </>
   );
 }
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required("Username is a required field"),
   password: Yup.string().required("Password is a required field"),
-  remember_pass: Yup.boolean(),});
+  remember_pass: Yup.boolean()
+});
 
 // Clearing the values in our form inputs
 const initialTestingFormValues = {
   username: "",
   password: "",
-  remember_pass: false,
+  remember_pass: false
 };

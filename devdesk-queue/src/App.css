@@ -46,6 +46,21 @@ font-weight: bolder;
 text-decoration: none;
 }
 
-.student-dashboard {
+.dashboard {
   display: flex;
+  flex-wrap: wrap;
+}
+
+.mapContainer {
+  width: 80vw;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-direction: column;
+
+}
+
+.ticket {
+  width: 30%;
 }

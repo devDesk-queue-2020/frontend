@@ -1,13 +1,36 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
-import * as Yup from 'yup';
-import { Form, Formik, Field, ErrorMessage } from 'formik';
+import axios from "axios";
+import * as Yup from "yup";
+import { Form, Formik, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 
+const MainHeader = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: RGB(188, 19, 50);
+`;
 
+const Img = styled.img`
+  width: 5rem;
+  height: 5rem;
+`;
 
+const Title = styled.header`
+  display: flex;
+  flex-wrap: wrap;
+
+  color: white;
+`;
+
+const Nav = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 15rem;
+`;
 
 const FormDiv = styled.div`
   margin-top: 10%;
@@ -23,12 +46,10 @@ const StyledForm = styled.div`
   padding: 2rem 2rem;
   border-radius: 5px;
   box-shadow: #999 1px 2px 5px;
-
   a {
     color: #08addd;
     text-decoration: none;
   }
-
   input {
     display: flex;
     flex-direction: column;
@@ -39,12 +60,10 @@ const StyledForm = styled.div`
     height: 30px;
     padding-left: 12px;
     outline: none;
-
     &::placeholder {
       color: gray;
     }
   }
-
   button {
     display: flex;
     margin-top: 1rem;
@@ -56,54 +75,71 @@ const StyledForm = styled.div`
     outline: none;
     border: none;
     border-radius: 3px;
-
     &:hover {
       color: #bb1333;
       background: #fff;
     }
   }
 `;
-export default function CreateTicket(props) {
+export default function CreateTicket() {
+  const [category, setCategory] = useState([]);
 
-const [category, setCategory] = useState([]);
+  const history = useHistory();
+  useEffect(() => {
+    Axios.get("https://devdesk-2020.herokuapp.com/api/category")
+    .then(res => {
+        console.log(res.data);
+        setCategory(res.data);
+      })
+      .catch(e => console.log(e.message))
+      .finally(() => {
+        console.log("Axios request finished.");
+      });
+  }, []);
 
+  function submitHandler(values, actions) {
+    console.log(values, actions);
+    values["status"] = "Open";
+    values["student_id"] = localStorage.getItem("userId");
+    // Sending form data to server
+    axios
+      .post("https://devdesk-2020.herokuapp.com/api/tickets", values)
+      .then(res => {
+        console.log(res);
+        if (res.status === 201) {
+          history.push("/student/dashboard");
+        }
+        console.log("response", res);
+        actions.resetForm();
+      })
+      .catch(e => console.log(e.message))
+      .finally(() => {
+        console.log("Axios request finished.");
+      });
+  }
 
-    const history = useHistory()
-    useEffect(() => {
-    Axios.get("http://devdesk-2020.heroku.app.com/api/category")
-    .then(response => {
-        console.log(response.data)
-        setCategory(response.data);
-    })
-    .catch(e => console.log(e))
-    .finally(() => {
-      console.log("Axios request finished.");
-    });
-}, []);
-    
-    function submitHandler (values, actions) {
-        console.log(values, actions);
-        values["status"] = "Open"
-        values["student_id"] = localStorage.getItem("userId")
-        // Sending form data to server
-        axios
-            .post("http://localhost:5001/api/tickets", values)
-            .then(res => {
-            console.log(res);
-            if (res.status === 201) {
-                history.push("/student/dashboard");
-            }
-            console.log("response", res);
-            actions.resetForm();
-            })
-            .catch(e => console.log(e))
-            .finally(() => {
-                console.log('Axios request finished.');
-            });
-    }
+  return (
+    <>
+      <MainHeader>
+        <Title>
+          <Img
+            className="main-img"
+            src={require(`./Lambda_Logo.jpg`)}
+            alt="logo"
+          />
+          <h1>Lambda DevDesk</h1>
+        </Title>
+        <Nav>
+          <Link className="nav-links" to={"/student/dashboard"}>
+            Dashboard
+          </Link>
+          <Link className="nav-links" to={"/login"}>
+            Sign Out
+          </Link>
+        </Nav>
+      </MainHeader>
 
-    return (
-        <FormDiv>
+      <FormDiv>
         <Formik
           onSubmit={submitHandler}
           initialValues={initialTestingFormValues}
@@ -111,21 +147,18 @@ const [category, setCategory] = useState([]);
         >
           <StyledForm>
             <Form>
-            <label htmlFor="createticket_category">Category: </label>
-            <Field as="select" name="category_id" id="createticket_category">
+              <label htmlFor="createticket_category">Category: </label>
+              <Field as="select" name="category_id" id="createticket_category">
                 <option value="">Select an option</option>
                 {category.map(cat => {
-return <option value={cat.id}>{cat.category_name}</option>
+                  return <option value={cat.id}>{cat.category_name}</option>;
                 })}
-                {/* <option value="html">HTML</option>
-                <option value="css">CSS</option>
-                <option value="js">JS</option>
-                <option value="react">React.js</option>
-                <option value="redux">Redux</option>
-                <option value="node">Node.js</option>
-                <option value="python">Python</option> */}
               </Field>
-              <ErrorMessage name="category_id" component="div" className="error" />
+              <ErrorMessage
+                name="category_id"
+                component="div"
+                className="error"
+              />
               <label htmlFor="createticket_title">Title</label>
               <Field type="text" id="createticket_title" name="title" />
               <ErrorMessage name="title" component="div" className="error" />
@@ -137,17 +170,17 @@ return <option value={cat.id}>{cat.category_name}</option>
           </StyledForm>
         </Formik>
       </FormDiv>
-    );
-    }
-    const validationSchema = Yup.object().shape({
-        category_id: Yup.number().required("Please select a category"),
-        title: Yup.string().required("Please give a title"),
-        content: Yup.string().required("Please describe your problem"),
-      });
+    </>
+  );
+}
+const validationSchema = Yup.object().shape({
+  category_id: Yup.number().required("Please select a category"),
+  title: Yup.string().required("Please give a title"),
+  content: Yup.string().required("Please describe your problem")
+});
 
-      const initialTestingFormValues = {
-        category_id: "",
-        title: "",
-        content: "",
-      };
-      
+const initialTestingFormValues = {
+  category_id: "",
+  title: "",
+  content: ""
+};
