@@ -103,14 +103,16 @@ export default function CreateTicket(props) {
   function submitHandler(values, actions) {
 
     values["status"] = "Open";
-    values["student_id"] = localStorage.getItem("userId");
+    values["student_id"] = Number(localStorage.getItem("userId"));
  
     // Sending form data to server
-    axios
-      .post("https://devdesk-queue-20.herokuapp.com/api/tickets", {
-        headers: {
-          token: localStorage.getItem("token")
-        }
+    axios({
+      method: 'post',
+      url: 'https://devdesk-queue-20.herokuapp.com/api/tickets',
+      headers: {
+      token: localStorage.getItem("token")
+      },
+       data: {...values}
       })
       .then(res => {
         console.log(res);
@@ -120,7 +122,7 @@ export default function CreateTicket(props) {
         console.log("response", res);
         actions.resetForm();
       })
-      .catch(e => console.log(e.message))
+      .catch(e => console.log(values))
       .finally(() => {
         console.log("axios request finished");
       });

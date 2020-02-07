@@ -70,7 +70,7 @@ export default function HelperDashboard(props) {
           </Link>
         </Nav>
       </MainHeader>
-      <h2>{props.user_id.message}</h2>
+      <h2>Helper Dashboard</h2>
       <div className="dashboard">
         {!tickets ? (
           <p>no tickets</p>
