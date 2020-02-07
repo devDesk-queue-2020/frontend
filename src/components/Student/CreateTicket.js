@@ -122,7 +122,7 @@ export default function CreateTicket(props) {
       })
       .catch(e => console.log(e.message))
       .finally(() => {
-        console.log("axios request finished.");
+        console.log("axios request finished");
       });
   }
 
