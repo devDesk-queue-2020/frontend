@@ -1,0 +1,134 @@
+import React, { useState } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import jwt from "jsonwebtoken";
+
+export default function TicketCard(props) {
+  const decoded = jwt.decode(localStorage.getItem("token"));
+
+  const [comment, setComment] = useState([]);
+
+  let filteredComments = [];
+  if (props.type === "student") {
+    filteredComments = props.comment.filter(
+      cmt => cmt.ticket_id === props.ticket.id
+    );
+  }
+
+  function submitHandler(e) {
+    e.preventDefault();
+
+    const respond = {};
+    respond["content"] = comment;
+    respond["author_id"] = localStorage.getItem("userId");
+    respond["ticket_id"] = props.ticket.id;
+
+    axios
+      .post("https://devdesk-queue-20.herokuapp.com/api/comments", respond, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      })
+      .then(res => {
+        if (res.status === 201) {
+          alert("Comment submitted!");
+          setComment("");
+        }
+      })
+      .catch(e => console.log(e.message));
+  }
+  return (
+    <Container>
+      <CardContainer>
+        <CardHeader>
+          <h2>{props.ticket.id}</h2>
+        </CardHeader>
+        <CardBody>
+          <div className="title">
+            <h2>{props.ticket.title}</h2>
+          </div>
+
+          <div className="ticket-content">
+            <h3>Description:</h3>
+            <p>{props.ticket.content}</p>
+          </div>
+          <div>
+            <p>Created at: {props.ticket.created_by}</p>
+          </div>
+          <CategoryDiv>
+            <h3>Category:</h3>
+            <p>{props.ticket.category_name}</p>
+          </CategoryDiv>
+          <StatusDiv>
+            <h3>Status: {props.ticket.status}</h3>
+          </StatusDiv>
+          <h3>Comments:</h3>
+          {decoded.role === "Student" &&
+            filteredComments.map(cmt => <p key={cmt.id}>{cmt.content}</p>)}
+
+          {decoded.role === "Helper" && (
+            <>
+              <label htmlFor="input_content">Respond to ticket:</label>
+              <form onSubmit={submitHandler}>
+                <input
+                  value={comment}
+                  onChange={e => setComment(e.target.value)}
+                  type="textarea"
+                  name="input_content"
+                />
+                <Button type="submit">Respond</Button>
+              </form>
+            </>
+          )}
+        </CardBody>
+      </CardContainer>
+    </Container>
+  );
+}
+
+const CategoryDiv = styled.div``;
+
+const StatusDiv = styled.div``;
+
+const Container = styled.div`
+  display: flex;
+  margin-bottom: 20px;
+`;
+
+const CardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 20rem;
+  margin: 10px 10px 10px 10px;
+  border-radius: 5px;
+  box-shadow: #999 1px 2px 5px;
+`;
+
+const CardHeader = styled.div`
+  color: white;
+  background-color: rgb(47, 43, 73);
+
+  h2 {
+    text-align: center;
+  }
+`;
+
+const Button = styled.button`
+  margin-top: 1rem;
+  padding: 0.5rem 0.5rem;
+  background: red;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  &:hover {
+    color: red;
+    background: white;
+  }
+`;
+
+const CardBody = styled.div`
+  padding: 0.5rem 2rem;
+`;
