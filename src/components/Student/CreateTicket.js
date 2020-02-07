@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import * as Yup from "yup";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
 // import { useHistory } from "react-router-dom";
-import Axios from "axios";
+import axios from "axios";
 import { Link } from "react-router-dom";
 
 const MainHeader = styled.header`
@@ -86,7 +85,7 @@ export default function CreateTicket(props) {
 
   // const history = useHistory();
   useEffect(() => {
-    Axios.get("https://devdesk-queue-20.herokuapp.com/api/category", {
+    axios.get("https://devdesk-queue-20.herokuapp.com/api/category", {
       headers: {
         token: localStorage.getItem("token")
       }
@@ -97,15 +96,15 @@ export default function CreateTicket(props) {
       })
       .catch(e => console.log(e.message))
       .finally(() => {
-        console.log("Axios request finished.");
+        console.log("axios request finished.");
       });
   }, []);
 
   function submitHandler(values, actions) {
-    console.log(values, actions);
+
     values["status"] = "Open";
     values["student_id"] = localStorage.getItem("userId");
-    console.log(localStorage.getItem("token"))
+ 
     // Sending form data to server
     axios
       .post("https://devdesk-queue-20.herokuapp.com/api/tickets", {
@@ -123,7 +122,7 @@ export default function CreateTicket(props) {
       })
       .catch(e => console.log(e.message))
       .finally(() => {
-        console.log("Axios request finished.");
+        console.log("axios request finished.");
       });
   }
 
