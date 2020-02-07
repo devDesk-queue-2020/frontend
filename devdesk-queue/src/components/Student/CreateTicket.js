@@ -3,7 +3,7 @@ import axios from "axios";
 import * as Yup from "yup";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -81,14 +81,14 @@ const StyledForm = styled.div`
     }
   }
 `;
-export default function CreateTicket() {
+export default function CreateTicket(props) {
   const [category, setCategory] = useState([]);
 
-  const history = useHistory();
+  // const history = useHistory();
   useEffect(() => {
-    Axios.get("https://devdesk-2020.herokuapp.com/api/category", {
+    Axios.get("https://devdesk-queue-20.herokuapp.com/api/category", {
       headers: {
-        Authorization: localStorage.getItem("token")
+        token: localStorage.getItem("token")
       }
     })
     .then(res => {
@@ -105,14 +105,18 @@ export default function CreateTicket() {
     console.log(values, actions);
     values["status"] = "Open";
     values["student_id"] = localStorage.getItem("userId");
+    console.log(localStorage.getItem("token"))
     // Sending form data to server
     axios
-      .post("https://devdesk-2020.herokuapp.com/api/tickets")
-    
+      .post("https://devdesk-queue-20.herokuapp.com/api/tickets", {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      })
       .then(res => {
         console.log(res);
-        if (res.status === 200) {
-          history.push("/student/dashboard");
+        if (res.status === 201) {
+          props.history.push("/student/dashboard");
         }
         console.log("response", res);
         actions.resetForm();

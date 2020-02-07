@@ -32,7 +32,7 @@ function App() {
       />
       <Route
         path="/student/dashboard"
-        render={props => <StudentDashboard token={token} />}
+        render={props => <StudentDashboard />}
       />{" "}
       <Route
         path="/helper/dashboard"
@@ -40,7 +40,7 @@ function App() {
       />
       <Route
         path="/student/createticket"
-        render={props => <CreateTicket token={token} />}
+        render={props => <CreateTicket {...props}/>}
       />
     </main>
   );

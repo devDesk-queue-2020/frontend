@@ -39,9 +39,9 @@ export default function StudentDashboard(props) {
   useEffect(() => {
     // Adding API Request here
     axios
-      .get("https://devdesk-2020.herokuapp.com/api/tickets", {
+      .get("https://devdesk-queue-20.herokuapp.com/api/tickets", {
         headers: {
-          Authorization: localStorage.getItem("token")
+          token: localStorage.getItem("token")
         }
       })
       .then(response => {
@@ -53,9 +53,9 @@ export default function StudentDashboard(props) {
         console.log("Axios request finished.");
       });
     axios
-      .get("https://devdesk-2020.herokuapp.com/api/comments", {
+      .get("https://devdesk-queue-20.herokuapp.com/api/comments", {
         headers: {
-          Authorization: localStorage.getItem("token")
+          token: localStorage.getItem("token")
         }
       })
       .then(response => {

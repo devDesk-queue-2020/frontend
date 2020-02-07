@@ -93,12 +93,12 @@ export default function SignUp(props) {
     console.log(values, actions);
     // Sending form data to server
     axios
-      .post("https://devdesk-2020.herokuapp.com/api/users/register", values)
+      .post("https://devdesk-queue-20.herokuapp.com/api/users/register", values)
       .then(res => {
         const newUser = {"username": res.data.userData.username, "password": values.password}
         console.log(newUser, res.data)
         axios
-        .post("https://devdesk-2020.herokuapp.com/api/users/login", newUser)
+        .post("https://devdesk-queue-20.herokuapp.com/api/users/login", newUser)
         .then(res => {
   console.log(res.data)
           props.setToken(res.data.token);
@@ -107,10 +107,10 @@ export default function SignUp(props) {
           console.log(decoded);
           if (decoded.role === "Helper") {
             console.log("helper");
-            props.history.push("/helper/dashboard");
+            props.history.push("/login");
           } else {
             console.log("student");
-            props.history.push("/student/dashboard");
+            props.history.push("/login");
           }
         })
         .catch(e => console.log(e.message))

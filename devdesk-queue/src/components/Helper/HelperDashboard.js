@@ -38,9 +38,9 @@ export default function HelperDashboard(props) {
   useEffect(() => {
     // Adding API Request here
     axios
-      .get("https://devdesk-2020.herokuapp.com/api/tickets", {
+      .get("https://devdesk-queue-20.herokuapp.com/api/tickets", {
         headers: {
-          Authorization: localStorage.getItem("token")
+          token: localStorage.getItem("token")
         }
       })
       .then(response => {
@@ -70,7 +70,7 @@ export default function HelperDashboard(props) {
           </Link>
         </Nav>
       </MainHeader>
-      <h2>Helper Dashboard</h2>
+      <h2>{props.user_id.message}</h2>
       <div className="dashboard">
         {!tickets ? (
           <p>no tickets</p>

@@ -93,7 +93,7 @@ export default function Login(props) {
     // Sending form data to server
 
     axios
-      .post("https://devdesk-2020.herokuapp.com/api/users/login", values)
+      .post("https://devdesk-queue-20.herokuapp.com/api/users/login", values)
       .then(res => {
         actions.resetForm();
         props.setToken(res.data.token);
