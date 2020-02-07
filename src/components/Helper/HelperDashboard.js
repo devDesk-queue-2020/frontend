@@ -33,7 +33,6 @@ const Nav = styled.div`
 export default function HelperDashboard(props) {
   // Adding useState to track data from useEffect
   const [tickets, setTickets] = useState([]);
-  console.log(tickets);
 
   useEffect(() => {
     // Adding API Request here
@@ -44,7 +43,6 @@ export default function HelperDashboard(props) {
         }
       })
       .then(response => {
-        console.log(response.data);
         setTickets(response.data);
       })
       .catch(e => console.log(e.message))

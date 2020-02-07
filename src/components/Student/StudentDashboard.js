@@ -33,7 +33,6 @@ const Nav = styled.div`
 export default function StudentDashboard(props) {
   // Adding useState to track data from useEffect
   const [tickets, setTickets] = useState([]);
-  console.log(tickets);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
@@ -45,7 +44,6 @@ export default function StudentDashboard(props) {
         }
       })
       .then(response => {
-        console.log(response.data);
         setTickets(response.data);
       })
       .catch(e => console.log(e.message))
@@ -59,7 +57,6 @@ export default function StudentDashboard(props) {
         }
       })
       .then(response => {
-        console.log(response.data);
         setComments(response.data);
       })
       .catch(e => console.log(e.message))

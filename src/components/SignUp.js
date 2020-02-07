@@ -90,26 +90,22 @@ width: 5rem;
 
 export default function SignUp(props) {
   function submitHandler(values, actions) {
-    console.log(values, actions);
     // Sending form data to server
     axios
       .post("https://devdesk-queue-20.herokuapp.com/api/users/register", values)
       .then(res => {
         const newUser = {"username": res.data.userData.username, "password": values.password}
-        console.log(newUser, res.data)
         axios
         .post("https://devdesk-queue-20.herokuapp.com/api/users/login", newUser)
         .then(res => {
-  console.log(res.data)
           props.setToken(res.data.token);
           const decoded = jwt.decode(res.data.token);
           localStorage.setItem("userId", decoded.user_id);
-          console.log(decoded);
           if (decoded.role === "Helper") {
-            console.log("helper");
+    
             props.history.push("/login");
           } else {
-            console.log("student");
+         
             props.history.push("/login");
           }
         })

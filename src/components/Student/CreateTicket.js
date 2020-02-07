@@ -91,7 +91,6 @@ export default function CreateTicket(props) {
       }
     })
     .then(res => {
-        console.log(res.data, "something else");
         setCategory(res.data);
       })
       .catch(e => console.log(e.message))
@@ -115,11 +114,9 @@ export default function CreateTicket(props) {
        data: {...values}
       })
       .then(res => {
-        console.log(res);
         if (res.status === 201) {
           props.history.push("/student/dashboard");
         }
-        console.log("response", res);
         actions.resetForm();
       })
       .catch(e => console.log(values))

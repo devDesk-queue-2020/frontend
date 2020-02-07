@@ -89,7 +89,6 @@ width: 10rem;
 
 export default function Login(props) {
   function submitHandler(values, actions) {
-    console.log(values, actions);
     // Sending form data to server
 
     axios
@@ -101,12 +100,9 @@ export default function Login(props) {
         localStorage.setItem("userId", decoded.user_id);
 
         localStorage.setItem("token", res.data.token);
-        console.log(decoded);
         if (decoded.role === "Helper") {
-          console.log("helper");
           props.history.push("/helper/dashboard");
         } else {
-          console.log("student");
           props.history.push("/student/dashboard");
         }
       })
