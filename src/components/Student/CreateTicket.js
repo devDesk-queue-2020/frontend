@@ -83,14 +83,15 @@ const StyledForm = styled.div`
 export default function CreateTicket(props) {
   const [category, setCategory] = useState([]);
 
-  // const history = useHistory();
+
   useEffect(() => {
-    axios.get("https://devdesk-queue-20.herokuapp.com/api/category", {
-      headers: {
-        token: localStorage.getItem("token")
-      }
-    })
-    .then(res => {
+    axios
+      .get("https://devdesk-queue-20.herokuapp.com/api/category", {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      })
+      .then(res => {
         setCategory(res.data);
       })
       .catch(e => console.log(e.message))
@@ -100,19 +101,18 @@ export default function CreateTicket(props) {
   }, []);
 
   function submitHandler(values, actions) {
-
     values["status"] = "Open";
     values["student_id"] = Number(localStorage.getItem("userId"));
- 
+
     // Sending form data to server
     axios({
-      method: 'post',
-      url: 'https://devdesk-queue-20.herokuapp.com/api/tickets',
+      method: "post",
+      url: "https://devdesk-queue-20.herokuapp.com/api/tickets",
       headers: {
-      token: localStorage.getItem("token")
+        token: localStorage.getItem("token")
       },
-       data: {...values}
-      })
+      data: { ...values }
+    })
       .then(res => {
         if (res.status === 201) {
           props.history.push("/student/dashboard");
@@ -158,7 +158,11 @@ export default function CreateTicket(props) {
               <Field as="select" name="category_id" id="createticket_category">
                 <option value="">Select an option</option>
                 {category.map(cat => {
-                  return <option key={cat.id} value={cat.id}>{cat.category_name}</option>;
+                  return (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.category_name}
+                    </option>
+                  );
                 })}
               </Field>
               <ErrorMessage

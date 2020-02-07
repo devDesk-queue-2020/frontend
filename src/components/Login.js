@@ -6,7 +6,6 @@ import styled from "styled-components";
 import jwt from "jsonwebtoken";
 import { Link } from "react-router-dom";
 
-
 const FormDiv = styled.div`
   margin-top: 5%;
 `;
@@ -62,30 +61,29 @@ const StyledForm = styled.div`
 `;
 
 const MainHeader = styled.header`
-display: flex;
-align-items: center;
-justify-content: space-between;
-background-color: RGB(188,19,50);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: RGB(188, 19, 50);
 `;
 
 const Img = styled.img`
-width: 5rem;
-height: 5rem;
+  width: 5rem;
+  height: 5rem;
 `;
 
 const Title = styled.header`
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  color: white;
 `;
 
 const Nav = styled.div`
-display: flex;
-justify-content: space-around;
-width: 10rem;
+  display: flex;
+  justify-content: space-around;
+  width: 10rem;
 `;
-
 
 export default function Login(props) {
   function submitHandler(values, actions) {
@@ -113,59 +111,64 @@ export default function Login(props) {
   }
 
   return (
-<>
-            <MainHeader>
-      <Title>
-      <Img
+    <>
+      <MainHeader>
+        <Title>
+          <Img
             className="main-img"
             src={require(`./Lambda_Logo.jpg`)}
             alt="logo"
           />
-      <h1>Lambda DevDesk</h1>
-      </Title>
-      <Nav>
-      <Link className="nav-links" to={"/signup"}>
+          <h1>Lambda DevDesk</h1>
+        </Title>
+        <Nav>
+          <Link className="nav-links" to={"/signup"}>
             Sign Up
           </Link>
           <Link className="nav-links" to={"/login"}>
-          Login
+            Login
           </Link>
-          </Nav>
-    </MainHeader>
+        </Nav>
+      </MainHeader>
 
-    <FormDiv>
-      <Formik
-        onSubmit={submitHandler}
-        initialValues={initialTestingFormValues}
-        validationSchema={validationSchema}
-      >
-        <StyledForm>
-          <Form>
-            <label htmlFor="loginform_username">Username</label>
-            <Field type="text" id="loginform_username" name="username" />
-            <ErrorMessage name="username" component="div" className="error" />
-            <label htmlFor="loginform_password">Password</label>
-            <Field type="password" id="loginform_password" name="password" />
-            <ErrorMessage name="password" component="div" className="error" />
-            <label htmlFor="loginform_remember_pass">Remember password?</label>
-            <Field
-              type="checkbox"
-              id="loginform_remember_pass"
-              name="remember_pass"
-            />
-            <ErrorMessage
-              name="remember_pass"
-              component="div"
-              className="error"
-            />
-            <button type="submit">Login</button>
-          </Form>
-          <p>Don't have an account? <Link className="nav-links" to={"/signup"}>
-          Sign up!
-          </Link></p>
-        </StyledForm>
-      </Formik>
-    </FormDiv>
+      <FormDiv>
+        <Formik
+          onSubmit={submitHandler}
+          initialValues={initialTestingFormValues}
+          validationSchema={validationSchema}
+        >
+          <StyledForm>
+            <Form>
+              <label htmlFor="loginform_username">Username</label>
+              <Field type="text" id="loginform_username" name="username" />
+              <ErrorMessage name="username" component="div" className="error" />
+              <label htmlFor="loginform_password">Password</label>
+              <Field type="password" id="loginform_password" name="password" />
+              <ErrorMessage name="password" component="div" className="error" />
+              <label htmlFor="loginform_remember_pass">
+                Remember password?
+              </label>
+              <Field
+                type="checkbox"
+                id="loginform_remember_pass"
+                name="remember_pass"
+              />
+              <ErrorMessage
+                name="remember_pass"
+                component="div"
+                className="error"
+              />
+              <button type="submit">Login</button>
+            </Form>
+            <p>
+              Don't have an account?{" "}
+              <Link className="nav-links" to={"/signup"}>
+                Sign up!
+              </Link>
+            </p>
+          </StyledForm>
+        </Formik>
+      </FormDiv>
     </>
   );
 }

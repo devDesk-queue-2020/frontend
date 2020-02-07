@@ -6,8 +6,6 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import jwt from "jsonwebtoken";
 
-
-
 const FormDiv = styled.div`
   margin-top: 5%;
 `;
@@ -63,29 +61,29 @@ const StyledForm = styled.div`
 `;
 
 const MainHeader = styled.header`
-display: flex;
-align-items: center;
-justify-content: space-between;
-background-color: RGB(188,19,50);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: RGB(188, 19, 50);
 `;
 
 const Img = styled.img`
-width: 5rem;
-height: 5rem;
+  width: 5rem;
+  height: 5rem;
 `;
 
 const Title = styled.header`
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-text-decoration: none;
-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  text-decoration: none;
+  color: white;
 `;
 
 const Nav = styled.div`
-display: flex;
-justify-content: space-around;
-width: 5rem;
+  display: flex;
+  justify-content: space-around;
+  width: 5rem;
 `;
 
 export default function SignUp(props) {
@@ -94,26 +92,30 @@ export default function SignUp(props) {
     axios
       .post("https://devdesk-queue-20.herokuapp.com/api/users/register", values)
       .then(res => {
-        const newUser = {"username": res.data.userData.username, "password": values.password}
+        const newUser = {
+          username: res.data.userData.username,
+          password: values.password
+        };
         axios
-        .post("https://devdesk-queue-20.herokuapp.com/api/users/login", newUser)
-        .then(res => {
-          props.setToken(res.data.token);
-          const decoded = jwt.decode(res.data.token);
-          localStorage.setItem("userId", decoded.user_id);
-          if (decoded.role === "Helper") {
-    
-            props.history.push("/login");
-          } else {
-         
-            props.history.push("/login");
-          }
-        })
-        .catch(e => console.log(e.message))
-        .finally(() => {
-          console.log("Axios request finished.");
-        });
-    })
+          .post(
+            "https://devdesk-queue-20.herokuapp.com/api/users/login",
+            newUser
+          )
+          .then(res => {
+            props.setToken(res.data.token);
+            const decoded = jwt.decode(res.data.token);
+            localStorage.setItem("userId", decoded.user_id);
+            if (decoded.role === "Helper") {
+              props.history.push("/login");
+            } else {
+              props.history.push("/login");
+            }
+          })
+          .catch(e => console.log(e.message))
+          .finally(() => {
+            console.log("Axios request finished.");
+          });
+      })
       .catch(e => console.log(e.message))
       .finally(() => {
         console.log("Axios request finished.");
@@ -122,58 +124,66 @@ export default function SignUp(props) {
 
   return (
     <>
-            <MainHeader>
-      <Title>
-      <Img
+      <MainHeader>
+        <Title>
+          <Img
             className="main-img"
             src={require(`./Lambda_Logo.jpg`)}
             alt="logo"
           />
-          
-      <h1>Lambda DevDesk</h1>
-      </Title>
-      <Nav>
-          <Link className="nav-links" to={"/login"}>
-          Login
-          </Link>
-          </Nav>
-    </MainHeader>
 
-    <FormDiv>
-      <Formik
-        onSubmit={submitHandler}
-        initialValues={initialTestingFormValues}
-        validationSchema={validationSchema}
-      >
-        <StyledForm>
-          <Form>
-            <label htmlFor="first_name">First Name</label>
-            <Field type="text" id="first_name" name="first_name" />
-            <ErrorMessage name="first_name" component="div" className="error" />
-            <label htmlFor="last_name">Last Name</label>
-            <Field type="text" id="last_name" name="last_name" />
-            <ErrorMessage name="last_name" component="div" className="error" />
-            <label htmlFor="username">Username</label>
-            <Field type="text" id="username" name="username" />
-            <ErrorMessage name="username" component="div" className="error" />
-            <label htmlFor="email">Email</label>
-            <Field type="text" id="email" name="email" />
-            <ErrorMessage name="email" component="div" className="error" />
-            <label htmlFor="password">Password</label>
-            <Field type="password" id="password" name="password" />
-            <ErrorMessage name="password" component="div" className="error" />
-            <label htmlFor="role">Select Role: </label>
-            <Field as="select" name="role" id="role">
-              <option value="">Select an option</option>
-              <option value="Helper">Helper</option>
-              <option value="Student">Student</option>
-            </Field>
-            <ErrorMessage name="role" component="div" className="error" />
-            <button type="submit">Sign Up</button>
-          </Form>
-        </StyledForm>
-      </Formik>
-    </FormDiv>
+          <h1>Lambda DevDesk</h1>
+        </Title>
+        <Nav>
+          <Link className="nav-links" to={"/login"}>
+            Login
+          </Link>
+        </Nav>
+      </MainHeader>
+
+      <FormDiv>
+        <Formik
+          onSubmit={submitHandler}
+          initialValues={initialTestingFormValues}
+          validationSchema={validationSchema}
+        >
+          <StyledForm>
+            <Form>
+              <label htmlFor="first_name">First Name</label>
+              <Field type="text" id="first_name" name="first_name" />
+              <ErrorMessage
+                name="first_name"
+                component="div"
+                className="error"
+              />
+              <label htmlFor="last_name">Last Name</label>
+              <Field type="text" id="last_name" name="last_name" />
+              <ErrorMessage
+                name="last_name"
+                component="div"
+                className="error"
+              />
+              <label htmlFor="username">Username</label>
+              <Field type="text" id="username" name="username" />
+              <ErrorMessage name="username" component="div" className="error" />
+              <label htmlFor="email">Email</label>
+              <Field type="text" id="email" name="email" />
+              <ErrorMessage name="email" component="div" className="error" />
+              <label htmlFor="password">Password</label>
+              <Field type="password" id="password" name="password" />
+              <ErrorMessage name="password" component="div" className="error" />
+              <label htmlFor="role">Select Role: </label>
+              <Field as="select" name="role" id="role">
+                <option value="">Select an option</option>
+                <option value="Helper">Helper</option>
+                <option value="Student">Student</option>
+              </Field>
+              <ErrorMessage name="role" component="div" className="error" />
+              <button type="submit">Sign Up</button>
+            </Form>
+          </StyledForm>
+        </Formik>
+      </FormDiv>
     </>
   );
 }
